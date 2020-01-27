@@ -1,0 +1,40 @@
+﻿<Window x:Class="DatabaseSQLiteAndPostgreSQLWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatabaseSQLiteAndPostgreSQLWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="1920" Top="0" Left="0">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <!-- Database -->
+            <StackPanel Orientation="Vertical">
+                <Label Content="Database" FontWeight="Bold"/>
+                <TextBox x:Name="textBoxDatabase" Width="250" />
+            </StackPanel>
+            <!-- //Database -->
+            <!-- Liquidbase -->
+            <StackPanel Orientation="Vertical">
+                <Label Content="Liquidbase" FontWeight="Bold"/>
+                <TextBox x:Name="textBoxLiquidbase" Width="400" />
+            </StackPanel>
+            <!-- //Liquidbase -->
+            <!-- Insert -->
+            <StackPanel Orientation="Vertical">
+                <Label Content="Insert" FontWeight="Bold"/>
+                <TextBox x:Name="textBoxInsert" Width="400" />
+            </StackPanel>
+            <!-- //Insert -->
+            <!-- Read -->
+            <StackPanel Orientation="Vertical">
+                <Label Content="Read" FontWeight="Bold"/>
+                <TextBox x:Name="textBoxRead" Width="400" />
+            </StackPanel>
+            <!-- //Read -->
+            
+        </StackPanel>
+        
+        
+    </Grid>
+</Window>

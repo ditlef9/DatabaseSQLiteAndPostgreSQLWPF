@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSQLiteAndPostgreSQLWPF", "DatabaseSQLiteAndPostgreSQLWPF\DatabaseSQLiteAndPostgreSQLWPF.csproj", "{47C4B7A6-77B8-436D-A502-8A359E02D32B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47C4B7A6-77B8-436D-A502-8A359E02D32B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47C4B7A6-77B8-436D-A502-8A359E02D32B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47C4B7A6-77B8-436D-A502-8A359E02D32B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47C4B7A6-77B8-436D-A502-8A359E02D32B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AFE6CBD-51AD-4553-AA2B-4079573B2516}
+	EndGlobalSection
+EndGlobal
