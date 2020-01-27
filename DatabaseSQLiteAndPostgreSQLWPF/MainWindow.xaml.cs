@@ -26,7 +26,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF
     public partial class MainWindow : Window
     {
         /*- Database */
-        String dbType = "sqlite"; // sqlite or postgresql
+        String dbType = "postgresql"; // sqlite or postgresql
         String dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MyProgram";
         String dbFile = "mydb.db";
         String dbHost = "localhost";

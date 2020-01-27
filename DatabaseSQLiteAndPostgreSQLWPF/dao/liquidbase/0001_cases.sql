@@ -9,8 +9,8 @@
     case_mirror_file_file TEXT,
     case_dir_path_windows TEXT,
     case_dir_path_linux TEXT,
-    case_created_datetime TEXT,
+    case_created_datetime DATETIME,
     case_created_saying TEXT,
-    case_updated_datetime TEXT,
+    case_updated_datetime DATETIME,
     case_updated_saying TEXT
 )

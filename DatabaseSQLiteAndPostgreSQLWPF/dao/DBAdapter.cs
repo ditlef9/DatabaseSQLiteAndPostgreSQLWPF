@@ -201,7 +201,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
                     // Get scriptname. Check if it has been run
                     String scriptPath = files[x];
                     Console.WriteLine("-------------------------------");
-                    Console.WriteLine("scriptName=" + scriptPath);
+                    Console.WriteLine("runLiquidbase() postgresql scriptName=" + scriptPath);
 
                     String query = "SELECT liquidbase_id FROM liquidbase_postgresql WHERE liquidbase_script='" + scriptPath + "'";
                     NpgsqlCommand command = new NpgsqlCommand(query, npgsqlCon);
@@ -231,6 +231,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
                         // Read script and execute it
                         string readScript = System.IO.File.ReadAllText(scriptPath);
                         readScript = readScript.Replace("_id INTEGER PRIMARY KEY,", "_id SERIAL PRIMARY KEY,");
+                        readScript = readScript.Replace("DATETIME", "TEXT");
                         this.command(readScript);
                     }
                 }
@@ -323,7 +324,8 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         /*- QeuryRows ---------------------------------------------------------------------------- */
         public NpgsqlDataReader queryRowsPostgres(String query)
         {
-           // Postgres
+            // Postgres
+            Console.WriteLine("NpgsqlDataReader queryRowsPostgres=" + query);
             NpgsqlCommand command = new NpgsqlCommand(query, npgsqlCon);
             NpgsqlDataReader npgsqlReader = command.ExecuteReader();
             return npgsqlReader;
