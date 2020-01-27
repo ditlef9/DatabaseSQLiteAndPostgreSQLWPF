@@ -21,7 +21,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
 
         String databasePath = ""; //  SQLite only (appData + "\\" + projectName + "\\" + "db")
         String databaseFile = ""; //  SQLite only (mydb.db)
-        String databaseType = ""; //  postgres
+        String databaseType = ""; //  postgresql
         String databaseHost = ""; // localhost
         String databasePort = ""; // 5432
         String databaseUser = ""; // postgres
@@ -43,7 +43,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
 
 
             // Database connection string
-            if (dbType.Equals("postgres")) { 
+            if (dbType.Equals("postgresql")) { 
                 string connstring = String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};",
                                                 databaseHost, databasePort, databaseUser, databasePassword, databaseName);
                 // Making connection with Npgsql provider
@@ -88,7 +88,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         /*- Open ---------------------------------------------------------------------------------- */
         public void open()
         {
-            if (this.databaseType.Equals("postgres")) {
+            if (this.databaseType.Equals("postgresql")) {
                 npgsqlCon.Open();
             }
             else
@@ -100,7 +100,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         /*- Close --------------------------------------------------------------------------------- */
         public void close()
         {
-            if (this.databaseType.Equals("postgres"))
+            if (this.databaseType.Equals("postgresql"))
             {
                 npgsqlCon.Close();
             }
@@ -116,7 +116,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         {
             bool exists = false;
 
-            if (this.databaseType.Equals("postgres")) { 
+            if (this.databaseType.Equals("postgresql")) { 
                 String query = @"SELECT * FROM information_schema.tables WHERE table_name = '" + tableName + "'";
                 NpgsqlCommand command = new NpgsqlCommand(query, npgsqlCon);
                 NpgsqlDataReader rdr = command.ExecuteReader();
@@ -137,7 +137,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         {
             bool exists = false;
 
-            if (this.databaseType.Equals("postgres"))
+            if (this.databaseType.Equals("postgresql"))
             {
                 String query = @"SELECT * FROM information_schema.tables WHERE table_name='liquidbase_postgresql'";
                 NpgsqlCommand command = new NpgsqlCommand(query, npgsqlCon);
@@ -157,7 +157,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         /*- Create liquidbase --------------------------------------------------------------------- */
         public void createLiquidbase()
         {
-            if (this.databaseType.Equals("postgres"))
+            if (this.databaseType.Equals("postgresql"))
             {
                 // Create sequence
                 String query = @"CREATE SEQUENCE liquidbase_id_seq";
@@ -192,7 +192,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         internal void runLiquidbase()
         {
 
-            if (this.databaseType.Equals("postgres"))
+            if (this.databaseType.Equals("postgresql"))
             {
                 String path = "dao/liquidbase";
                 string[] files = Directory.GetFiles(path);
@@ -234,7 +234,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
                         this.command(readScript);
                     }
                 }
-            } // postgres
+            } // postgresql
             else
             {
                 String path = "dao/liquidbase";
@@ -282,7 +282,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         {
             int numberOfRows = -1;
 
-            if (this.databaseType.Equals("postgres"))
+            if (this.databaseType.Equals("postgresql"))
             {
                 NpgsqlCommand command = new NpgsqlCommand(query, npgsqlCon);
                 NpgsqlDataReader reader = command.ExecuteReader();
@@ -341,32 +341,48 @@ namespace DatabaseSQLiteAndPostgreSQLWPF.dao
         public void command(String query)
         {
 
-            if (this.databaseType.Equals("postgres"))
+            Console.WriteLine("DBAdapterPostgreSQL command(): " + query);
+            if (this.databaseType.Equals("postgresql"))
             {
-                int tries = 0;
-                while (true)
+                try
                 {
-                    Console.WriteLine("PostgreSQLWpf command " + query);
-                    try
+                    var command = new NpgsqlCommand(query, npgsqlCon);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    // Something made the code crash
+                    // PostgreSQL doesnt need the first row (the ID row when inserting data)
+                    // Check if the statement is "insert" and first row is "id" and value is "NULL"
+                    // Example: INSERT INTO cases(case_id, case_number, case_evidence_number) VALUES(NULL, 12345, 6);
+                    if (query.StartsWith("INSERT INTO"))
                     {
-                        var command = new NpgsqlCommand(query, npgsqlCon);
-                        command.ExecuteNonQuery();
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Something is keeping the database table 
-                        Console.WriteLine("DBAdapterPostgreSQL: " + ex.Message);
-                        Console.WriteLine("Sleep for 1 seconds.");
-                        Thread.Sleep(1000);
-                        if (tries > 50)
+                        if (query.Contains("VALUES(NULL,"))
                         {
-                            break;
+                            // Remove VALUES(NULL,
+                            String columnsAndValues = query.Substring(query.IndexOf('(') + 1);
+                            int index = columnsAndValues.IndexOf(',');
+                            String firstColumn    = columnsAndValues.Substring(0, index);
+                            String firstColumnComma = firstColumn + ", ";
+
+                            String postgreQuery = query.Replace("VALUES(NULL, ", "VALUES(");
+                            postgreQuery = postgreQuery.Replace(firstColumnComma, "");
+
+                            try { 
+                                var command = new NpgsqlCommand(postgreQuery, npgsqlCon);
+                                command.ExecuteNonQuery();
+                            } catch(Exception exf)
+                            {
+                                Console.WriteLine("DBAdapterPostgreSQL: " + postgreQuery + " -> "  + exf.Message);
+
+                            }
+
+
                         }
                     }
-                    tries++;
+                    Console.WriteLine("DBAdapterPostgreSQL: " + ex.Message);
                 }
-            } // postgres
+            } // postgresql
             else
             {
                 try

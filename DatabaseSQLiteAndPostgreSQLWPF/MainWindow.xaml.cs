@@ -26,7 +26,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF
     public partial class MainWindow : Window
     {
         /*- Database */
-        String dbType = "sqlite"; // sqlite or postgres
+        String dbType = "sqlite"; // sqlite or postgresql
         String dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MyProgram";
         String dbFile = "mydb.db";
         String dbHost = "localhost";
@@ -118,7 +118,7 @@ namespace DatabaseSQLiteAndPostgreSQLWPF
             // Check if exists
             String query = "SELECT case_id FROM cases WHERE case_number=" + caseNumberSQL + " AND case_evidence_number=" + evidenceNumberSQL;
             bool isDuplicate = false;
-            if (dbType.Equals("postgres"))
+            if (dbType.Equals("postgresql"))
             {
                 NpgsqlDataReader reader = dbAdapter.queryRowsPostgres(query);
                 if (reader.HasRows)
@@ -166,8 +166,8 @@ namespace DatabaseSQLiteAndPostgreSQLWPF
 
 
             // Read
-            String query = "SELECT case_id, case_number, case_evidence_number FROM cases ORDER BY case_id DESC LIMIT 0,15";
-            if (dbType.Equals("postgres"))
+            String query = "SELECT case_id, case_number, case_evidence_number FROM cases ORDER BY case_id DESC LIMIT 15 offset 0";
+            if (dbType.Equals("postgresql"))
             {
                 NpgsqlDataReader reader = dbAdapter.queryRowsPostgres(query);
                 while (reader.Read())
